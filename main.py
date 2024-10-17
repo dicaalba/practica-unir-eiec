@@ -1,49 +1,25 @@
-"""
-License: Apache
-Organization: UNIR
-"""
+import argparse
 
-import os
-import sys
+def sort_list(lista, ascendente=True):
+    """Ordena la lista en orden ascendente o descendente."""
+    return sorted(lista, reverse=not ascendente)
 
-DEFAULT_FILENAME = "words.txt"
-DEFAULT_DUPLICATES = False
+if _name_ == "_main_":
+    # Configuramos el analizador de argumentos
+    parser = argparse.ArgumentParser(description="Ordena una lista de palabras.")
+    
+    # Argumento opcional para definir el orden ascendente o descendente
+    parser.add_argument("--descendente", action="store_true", 
+                        help="Ordena la lista en orden descendente")
+    
+    # Parseamos los argumentos de la línea de comandos
+    args = parser.parse_args()
 
+    # Ejemplo de lista de palabras (puedes adaptarlo a tu caso)
+    palabras = ["casa", "auto", "bicicleta", "avión"]
 
-def sort_list(items, ascending=True):
-    if not isinstance(items, list):
-        raise RuntimeError(f"No puede ordenar {type(items)}")
+    # Llamamos a la función con el parámetro correspondiente
+    resultado = sort_list(palabras, ascendente=not args.descendente)
 
-    return sorted(items, reverse=(not ascending))
-
-
-def remove_duplicates_from_list(items):
-    return list(set(items))
-
-
-if __name__ == "__main__":
-    filename = DEFAULT_FILENAME
-    remove_duplicates = DEFAULT_DUPLICATES
-    if len(sys.argv) == 3:
-        filename = sys.argv[1]
-        remove_duplicates = sys.argv[2].lower() == "yes"
-    else:
-        print("Se debe indicar el fichero como primer argumento")
-        print("El segundo argumento indica si se quieren eliminar duplicados")
-        sys.exit(1)
-
-    print(f"Se leerán las palabras del fichero {filename}")
-    file_path = os.path.join(".", filename)
-    if os.path.isfile(file_path):
-        word_list = []
-        with open(file_path, "r") as file:
-            for line in file:
-                word_list.append(line.strip())
-    else:
-        print(f"El fichero {filename} no existe")
-        word_list = ["ravenclaw", "gryffindor", "slytherin", "hufflepuff"]
-
-    if remove_duplicates:
-        word_list = remove_duplicates_from_list(word_list)
-
-    print(sort_list(word_list))
+    # Mostramos el resultado por pantalla
+    print("Lista ordenada:", resultado)
